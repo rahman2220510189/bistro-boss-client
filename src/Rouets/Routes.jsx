@@ -95,7 +95,7 @@ import AdminHome from "../Pages/Dashboard/AdminHome/AdminHome";
         {
           path:'updateItem/:id',
           element:<UpdateItem></UpdateItem>,
-          loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+          loader: ({params}) => fetch(`https://bistro-boss-server-production-d1dd.up.railway.app/menu/${params.id}`)
         },
         {
           path:'addItems',
@@ -109,3 +109,4 @@ import AdminHome from "../Pages/Dashboard/AdminHome/AdminHome";
       ]
     },
   ]);
+  

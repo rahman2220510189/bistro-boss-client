@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
  const axiosSecure = axios.create({
-    baseURL:'http://localhost:5000'
- }) 
+    baseURL:'https://bistro-boss-server-production-d1dd.up.railway.app/'
+ })
+
 const useAxiosSecure = () => {
   //interceptor request 
   const navigate = useNavigate();

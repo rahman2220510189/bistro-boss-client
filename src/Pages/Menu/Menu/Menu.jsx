@@ -9,7 +9,7 @@ import tsalad from'../../../assets/menu/salad-bg.jpg'
 import tpizza from'../../../assets/menu/pizza-bg.jpg'
 import tsoup from'../../../assets/menu/soup-bg.jpg'
 const Menu = () => {
-const[menu] = useMenu()
+const[menu ] = useMenu()
 const dessert = menu.filter(item => item.category === 'dessert')
 const soup = menu.filter(item => item.category === 'soup')
 const salad = menu.filter(item => item.category === 'salad')

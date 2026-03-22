@@ -15,58 +15,30 @@ const NavBar = () => {
       .then(() => { })
       .catch(error => console.log(error))
   }
+
   const navOptions = <>
-    <li><Link to='/'>Home</Link></li>
-    <li><Link to='/menu'>Our Menu</Link></li>
-    <li><Link to='/order'>Order Food</Link></li>
-    <li><Link to='/contact'>Contact Us</Link></li>
-    {
-      user && isAdmin && <li><Link to='/dashboard/adminHome'>Dashboard</Link></li>
-
+    <li><Link to='/' className="hover:text-yellow-400 transition-colors duration-200">Home</Link></li>
+    <li><Link to='/menu' className="hover:text-yellow-400 transition-colors duration-200">Our Menu</Link></li>
+    <li><Link to='/order' className="hover:text-yellow-400 transition-colors duration-200">Order Food</Link></li>
+    <li><Link to='/contact' className="hover:text-yellow-400 transition-colors duration-200">Contact Us</Link></li>
+    {user && isAdmin &&
+      <li><Link to='/dashboard/adminHome' className="hover:text-yellow-400 transition-colors duration-200">Dashboard</Link></li>
     }
-    {
-      user && !isAdmin && <li><Link to='/dashboard/userHome'>Dashboard</Link></li>
-
+    {user && !isAdmin &&
+      <li><Link to='/dashboard/userHome' className="hover:text-yellow-400 transition-colors duration-200">Dashboard</Link></li>
     }
-    {/* <li>
+    <li>
       <Link to='/dashboard/cart'>
-      <button className='btn'>
-      <FaShoppingCart className=' text-green-800 ' />
-        <div className='badge badge-secondary'>+{cart.length}</div>
-      </button>
-      </Link></li>
-   
-
-    
-   {
-    
-    user ? <>
-    
-    <button onClick={handleLogOut} className="btn btn-active btn-ghost">Log Out</button>
-
-    
-    </> : <>
-        <li className='hover:bg-slate-200 rounded-sm'><Link to='/login'>Login</Link></li>
-
-    </>
-   } */}
-    <div className="flex items-center gap-6">
-      <Link to='/dashboard/cart'>
-        <button className='btn ml-2'>
-          <FaShoppingCart className='text-green-800' />
-          <div className='badge badge-secondary'>+{cart.length}</div>
+        <button className='btn btn-sm md:btn-md gap-2'>
+          <FaShoppingCart className='text-green-600 text-base md:text-lg' />
+          <div className='badge badge-secondary text-xs'>+{cart.length}</div>
         </button>
       </Link>
-
-    </div>
-
-
-
-
-
+    </li>
   </>
+
   return (
-    <div className="navbar fixed z-10 bg-opacity-15 text-white bg-black max-w-screen-xl  ">
+    <div className="navbar fixed z-10 bg-black bg-opacity-60 backdrop-blur-sm text-white w-full px-4 md:px-8 lg:px-16 shadow-md">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -85,30 +57,36 @@ const NavBar = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            className="menu menu-sm dropdown-content bg-base-100 text-black rounded-box z-[1] mt-3 w-52 p-2 shadow-xl">
             {navOptions}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Bistro Boss</a>
+        <Link to='/' className="btn btn-ghost text-lg md:text-xl font-bold tracking-widest hover:text-yellow-400 transition-colors duration-200">
+          Bistro Boss
+        </Link>
       </div>
+
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-1">
           {navOptions}
         </ul>
-
       </div>
 
-      <div className="navbar-end">
-
-        {
-          user ? (
-            <button onClick={handleLogOut} className="btn btn-active btn-ghost">
-              Log Out
+      <div className="navbar-end gap-2">
+        {user ? (
+          <button
+            onClick={handleLogOut}
+            className="btn btn-sm md:btn-md btn-ghost border border-white border-opacity-30 hover:bg-white hover:text-black transition-all duration-200"
+          >
+            Log Out
+          </button>
+        ) : (
+          <Link to='/login'>
+            <button className="btn btn-sm md:btn-md btn-ghost border border-white border-opacity-30 hover:bg-white hover:text-black transition-all duration-200">
+              Login
             </button>
-          ) : (
-            <Link to='/login' className='btn btn-ghost'>Login</Link>
-          )
-        }
+          </Link>
+        )}
       </div>
     </div>
   );

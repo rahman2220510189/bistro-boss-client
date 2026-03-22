@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 
 const ManageItems = () => {
     const [menu, , refetch] = useMenu();
-    
     const axiosSecure = useAxiosSecure();
-    const handleDelete =  (item) => {
+
+    const handleDelete = (item) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -18,89 +18,80 @@ const ManageItems = () => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then(async(result) => {
+        }).then(async(result) => {
             if (result.isConfirmed) {
                 const res = await axiosSecure.delete(`/menu/${item._id}`)
                 console.log(res.data)
                 if(res.data.deletedCount > 0){
                     refetch();
-                  
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
-                        title:`${item.name}Your work has been saved`, 
+                        title:`${item.name} has been deleted`,
                         showConfirmButton: false,
                         timer: 1500
-                      });
-
+                    });
                 }
-             
             }
-          });
-
+        });
     }
+
     return (
-        <div>
+        <div className="px-4 md:px-6 lg:px-8 py-6">
             <SectionTitle heading='Manage Items' subHeading='hurry up'></SectionTitle>
 
-            <div className="overflow-x-auto">
-                <table className="table w-full">
-                    {/* head */}
-                    <thead>
+            <div className="overflow-x-auto rounded-xl shadow-md">
+                <table className="table w-full text-sm md:text-base">
+                    <thead className="bg-orange-500 text-white">
                         <tr>
-                            <th>
-                                <label>
-                                    <input type="checkbox" className="checkbox" />
-                                </label>
-                            </th>
-                            <th>Image</th>
-                            <th>Item name</th>
-                            <th>Price</th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th className="py-3 px-4">#</th>
+                            <th className="py-3 px-4">Image</th>
+                            <th className="py-3 px-4">Item Name</th>
+                            <th className="py-3 px-4">Price</th>
+                            <th className="py-3 px-4 text-center">Update</th>
+                            <th className="py-3 px-4 text-center">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* row 1 */}
-                        {
-                            menu.map((item, index) => <tr key={item._id}>
-                                <td>
+                        {menu.map((item, index) =>
+                            <tr key={item._id} className="hover:bg-orange-50 transition-colors duration-150 border-b border-gray-100">
+                                <td className="py-3 px-4 font-medium text-gray-500">
                                     {index + 1}
                                 </td>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src={item.image}
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
+                                <td className="py-3 px-4">
+                                    <div className="avatar">
+                                        <div className="mask mask-squircle h-10 w-10 md:h-12 md:w-12">
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                            />
                                         </div>
-
                                     </div>
                                 </td>
-                                <td>
+                                <td className="py-3 px-4 font-semibold text-gray-700">
                                     {item.name}
-
                                 </td>
-                                <td>{item.price}</td>
-                                <td>
-                                    <Link to ={`/dashboard/updateItem/${item._id}`}>
-                                    <button  className="btn bg-orange-600"><FaEdit className="text-green-600"></FaEdit></button>
-
+                                <td className="py-3 px-4 text-orange-500 font-bold">
+                                    ${item.price}
+                                </td>
+                                <td className="py-3 px-4 text-center">
+                                    <Link to={`/dashboard/updateItem/${item._id}`}>
+                                        <button className="btn btn-sm bg-orange-500 hover:bg-orange-600 border-0 text-white transition-colors duration-200">
+                                            <FaEdit />
+                                        </button>
                                     </Link>
                                 </td>
-                                <td>
-
-                                    <button onClick={() =>{ console.log(item._id) ;handleDelete(item)}} className="btn btn-ghost btn-lg"><FaTrash className='text-red-600'></FaTrash></button>
-
+                                <td className="py-3 px-4 text-center">
+                                    <button
+                                        onClick={() => handleDelete(item)}
+                                        className="btn btn-sm btn-ghost hover:bg-red-100 transition-colors duration-200"
+                                    >
+                                        <FaTrash className='text-red-500' />
+                                    </button>
                                 </td>
-                            </tr>)
-                        }
-
+                            </tr>
+                        )}
                     </tbody>
-                    {/* foot */}
-
                 </table>
             </div>
         </div>

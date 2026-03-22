@@ -14,31 +14,30 @@ const Order = () => {
     const initialIndex =categories.indexOf(category)
     const[tabIndex, setTabindex] =useState(initialIndex);
     const [menu] =useMenu();
-    
-    
+
 const dessert = menu.filter(item => item.category === 'dessert')
 const soup = menu.filter(item => item.category === 'soup')
 const salad = menu.filter(item => item.category === 'salad')
 const pizza = menu.filter(item => item.category === 'pizza')
 const drinks = menu.filter(item => item.category === 'drinks')
+
     return (
-        <div>
+        <div className="min-h-screen">
             <Helmet>
-                    <title>Bistro Boss | Order Food</title>
-                  </Helmet>
+                <title>Bistro Boss | Order Food</title>
+            </Helmet>
             <Cover img={orderCover} title='OUR SHOP'></Cover>
-            <div className='text-center mt-12 mb-10 text-gray-800 font-bold hover:text-yellow-600 '>
+            <div className='text-center mt-8 md:mt-12 mb-8 md:mb-10 px-4 md:px-8 lg:px-16'>
             <Tabs defaultIndex={tabIndex} onSelect={(index) => setTabindex(index)}>
-                <TabList>
-                    <Tab>SALAD</Tab>
-                    <Tab>PIZZA</Tab>
-                    <Tab>SOUPS</Tab>
-                    <Tab>DESSERTS</Tab>
-                    <Tab>DRINKS</Tab>
+                <TabList className="flex flex-wrap justify-center gap-1 md:gap-2 border-b border-gray-200 mb-6">
+                    <Tab className="px-3 py-2 md:px-5 md:py-2 text-xs md:text-sm font-bold text-gray-700 cursor-pointer hover:text-yellow-600 transition-colors duration-200 rounded-t">SALAD</Tab>
+                    <Tab className="px-3 py-2 md:px-5 md:py-2 text-xs md:text-sm font-bold text-gray-700 cursor-pointer hover:text-yellow-600 transition-colors duration-200 rounded-t">PIZZA</Tab>
+                    <Tab className="px-3 py-2 md:px-5 md:py-2 text-xs md:text-sm font-bold text-gray-700 cursor-pointer hover:text-yellow-600 transition-colors duration-200 rounded-t">SOUPS</Tab>
+                    <Tab className="px-3 py-2 md:px-5 md:py-2 text-xs md:text-sm font-bold text-gray-700 cursor-pointer hover:text-yellow-600 transition-colors duration-200 rounded-t">DESSERTS</Tab>
+                    <Tab className="px-3 py-2 md:px-5 md:py-2 text-xs md:text-sm font-bold text-gray-700 cursor-pointer hover:text-yellow-600 transition-colors duration-200 rounded-t">DRINKS</Tab>
                 </TabList>
                 <TabPanel>
-                 <OrderdBy item={salad}></OrderdBy>
-                
+                    <OrderdBy item={salad}></OrderdBy>
                 </TabPanel>
                 <TabPanel>
                     <OrderdBy item={pizza}></OrderdBy>
@@ -46,7 +45,7 @@ const drinks = menu.filter(item => item.category === 'drinks')
                 <TabPanel>
                     <OrderdBy item={soup}></OrderdBy>
                 </TabPanel>
-                <TabPanel> 
+                <TabPanel>
                     <OrderdBy item={dessert}></OrderdBy>
                 </TabPanel>
                 <TabPanel>
@@ -59,8 +58,3 @@ const drinks = menu.filter(item => item.category === 'drinks')
 };
 
 export default Order;
-
-
-
-
-

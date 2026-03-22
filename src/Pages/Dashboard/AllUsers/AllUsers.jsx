@@ -1,114 +1,79 @@
 import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaTrash, FaUsers } from "react-icons/fa";
-import Swal from "sweetalert2";
+import { FaDollarSign, FaJediOrder, FaUsers } from "react-icons/fa";
+import { FaMagento } from "react-icons/fa6";
 
-
-const AllUsers = () => {
-   
+const AdminHome = () => {
+    const {user} = useAuth();
     const axiosSecure = useAxiosSecure();
-    const{data: users = [] , refetch} = useQuery({
-        queryKey:['users'],
-        queryFn: async() =>{
-            const  res = await axiosSecure.get('/users')
+    const {data: stats, isLoading} = useQuery({
+        queryKey: ['admin-stats'],
+        queryFn: async()=>{
+            const res = await axiosSecure.get('/admin-stats')
             return res.data
         }
-    })
-      const handleMakeAdmin = user =>{
-        axiosSecure.patch(`/users/admin/${user._id}`)
-        .then(res=>{
-            console.log(res.data)
-            if(res.data.modifiedCount > 0){
-                refetch();
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: `${user.name} is an Admin Now!`  ,
-                    showConfirmButton: false,
-                    timer: 1500
-                  });  
-            }
-        })
+    });
 
-      }
-
-    const handleUserDelete = user =>{
-            Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                  })
-                  .then((result) => {
-                    if (result.isConfirmed)
-                        axiosSecure.delete(`/users/${user._id}`) 
-                    .then(res=>{
-                        if(res.data.deletedCount>0){
-                            {
-                                Swal.fire({
-                                  title: "Deleted!",
-                                  text: "Your file has been deleted.",
-                                  icon: "success"
-                                });
-                              }
-                        refetch();
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Delete failed', error);
-                    })
-                       
-                  });
-
+    if(isLoading){
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+                <p className="text-sm text-gray-500 animate-pulse">Loading dashboard...</p>
+            </div>
+        );
     }
 
- 
     return (
-        <div>
-        <div className="flex justify-evenly my-4">
-            <h2 className="text-3xl">All Users</h2>
-            <h2 className="text-3xl">Total Users: {users.length}</h2>
-        </div>
-        <div className="overflow-x-auto w-full">
-  <table className="table table-zebra">
-    {/* head */}
-    <thead>
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Action</th>
+        <div className="px-4 md:px-6 lg:px-8 py-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-700 mb-8">
+                <span>Hi, Welcome </span>
+                <span className="text-orange-500">
+                    {user?.displayName ? user.displayName : 'Back'}
+                </span> 👋
+            </h2>
 
-      </tr>
-    </thead>
-    <tbody>
-     
-     {
-        users.map((user,index) =>  <tr key={user._id}>
-            <th>{index+1}</th>
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>
-            {
-            user.role === 'admin'? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn"><FaUsers className="text-yellow-500"></FaUsers></button>
-             }
-            </td>
-         
-            <td>
-                <button onClick={() => handleUserDelete(user)} className="btn"><FaTrash className="text-red-700"></FaTrash></button>
-            </td>
-          </tr>)
-     }
-  
-    </tbody>
-  </table>
-</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+
+                <div className="stat bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div className="stat-figure text-white opacity-80">
+                        <FaDollarSign className="text-4xl md:text-5xl" />
+                    </div>
+                    <div className="stat-title text-white opacity-90 font-medium">Revenue</div>
+                    <div className="stat-value text-white text-2xl md:text-3xl">${stats.revenue}</div>
+                    <div className="stat-desc text-white opacity-75 text-xs">Total earnings</div>
+                </div>
+
+                <div className="stat bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div className="stat-figure text-white opacity-80">
+                        <FaUsers className="text-4xl md:text-5xl" />
+                    </div>
+                    <div className="stat-title text-white opacity-90 font-medium">Users</div>
+                    <div className="stat-value text-white text-2xl md:text-3xl">{stats.users}</div>
+                    <div className="stat-desc text-white opacity-75 text-xs">Registered users</div>
+                </div>
+
+                <div className="stat bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div className="stat-figure text-white opacity-80">
+                        <FaJediOrder className="text-4xl md:text-5xl" />
+                    </div>
+                    <div className="stat-title text-white opacity-90 font-medium">Orders</div>
+                    <div className="stat-value text-white text-2xl md:text-3xl">{stats.orders}</div>
+                    <div className="stat-desc text-white opacity-75 text-xs">Total orders placed</div>
+                </div>
+
+                <div className="stat bg-gradient-to-br from-green-400 to-green-600 text-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div className="stat-figure text-white opacity-80">
+                        <FaMagento className="text-4xl md:text-5xl" />
+                    </div>
+                    <div className="stat-title text-white opacity-90 font-medium">Menu Items</div>
+                    <div className="stat-value text-white text-2xl md:text-3xl">{stats.menuItems}</div>
+                    <div className="stat-desc text-white opacity-75 text-xs">Available dishes</div>
+                </div>
+
+            </div>
         </div>
     );
 };
 
-export default AllUsers;
+export default AdminHome;
